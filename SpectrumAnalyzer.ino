@@ -24,6 +24,11 @@ int i;
 int divisor =  1024 / NUM_LEDS;
 int litPix;
 
+// Potentiometer Variables
+int potPin = 2;
+int potVal = 0;
+// This is used to store and modify the color value
+int adj_Val = 0;
 
 void setup() {
   //Set Spectrum Shield pin configurations
@@ -51,6 +56,7 @@ void setup() {
 }
 
 void loop() {
+  Read_Pot();
   Read_Frequencies();
   //Graph_Frequencies();
   Graph_Frequencies_Adjusted();
@@ -107,12 +113,13 @@ void Graph_Frequencies_Adjusted(){
     if(Frequencies_Two[i] > Frequencies_One[i]){
       // The number of leds we want to be light up
       litPix = Frequencies_Two[i] / divisor;
+      adj_Val = Adjust_Color_Value(pot_Val, Frequencies_Two[i]);
       // We loop through and light up the leds for the strip we are on
       // For the odd numbered strips we have to switch the order we light
       // pixels so they all start from the bottom.
       if( i % 2 != 0 ){
         for( p = peak; p > peak - litPix; p -- ) {
-          leds[p]= CHSV( Frequencies_Two[i]/4, 255, BRIGHT);
+          leds[p]= CHSV( adj_Val, 255, BRIGHT);
         }
         // We turn off the rest of the leds on that strip
         for(p = base; p <= peak - litPix -1 ; p++ ){
@@ -121,7 +128,7 @@ void Graph_Frequencies_Adjusted(){
       }
       else {
         for( p = base; p <= base + litPix; p ++ ) {
-          leds[p]= CHSV( Frequencies_Two[i]/4, 255, BRIGHT);
+          leds[p]= CHSV( adj_Val, 255, BRIGHT);
         }
         // We turn off the rest of the leds on that strip
         for(p = base + litPix + 1; p <= peak ; p++ ){
@@ -132,9 +139,10 @@ void Graph_Frequencies_Adjusted(){
     } 
     else{ // This should be the same as above, its used if frequecies_one is the higher value
       litPix = Frequencies_One[i] / divisor;
+      adj_Val = Adjust_Color_Value(pot_Val, Frequencies_One[i]);
       if( i % 2 != 0 ){
         for( p = peak; p > peak - litPix; p -- ) {
-          leds[p]= CHSV( Frequencies_One[i]/4, 255, BRIGHT);
+          leds[p]= CHSV( adj_Val, 255, BRIGHT);
         }
         // We turn off the rest of the leds on that strip
         for(p = base; p <= peak - litPix -1 ; p++ ){
@@ -143,7 +151,7 @@ void Graph_Frequencies_Adjusted(){
       }
       else {
         for( p = base; p <= base + litPix; p ++ ) {
-          leds[p]= CHSV( Frequencies_One[i]/4, 255, BRIGHT);
+          leds[p]= CHSV( adj_Val, 255, BRIGHT);
         }
         // We turn off the rest of the leds on that strip
         for(p = base + litPix + 1; p <= peak ; p++ ){
@@ -152,4 +160,18 @@ void Graph_Frequencies_Adjusted(){
       }
     }
   }
+}
+
+void Read_Pot(){
+  potVal = analogRead(potPin);
+}
+
+// This fuction expects both values to be a 1024 value
+int Adjust_Color_Value(int val, int freq){
+  int store;
+  store = (val / 4) + (freq / 4);
+  if( store > 255){
+    store = store - 255;
+  }
+  return store;
 }
