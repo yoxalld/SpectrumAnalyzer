@@ -1,6 +1,23 @@
 {
     "configurations": [
         {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/home/dustin/Arduino/libraries/**",
+                "/home/dustin/Downloads/arduino-1.8.8/tools/**",
+                "/home/dustin/Downloads/arduino-1.8.8/hardware/arduino/avr/**",
+                "/home/dustin/Downloads/arduino-1.8.8/hardware/**"
+            ],
+            "forcedInclude": [
+                "/home/dustin/Downloads/arduino-1.8.8/hardware/arduino/avr/cores/arduino/Arduino.h"
+            ],
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        },
+        {
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",

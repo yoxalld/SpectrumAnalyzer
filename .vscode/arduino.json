@@ -1,3 +1,6 @@
 {
-    "board": "arduino:avr:uno"
+    "board": "arduino:avr:uno",
+    "programmer": "AVR ISP",
+    "sketch": "SpectrumAnalyzer.ino",
+    "port": "/dev/ttyUSB0"
 }
